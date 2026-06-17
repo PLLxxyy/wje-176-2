@@ -258,9 +258,9 @@ async function main() {
     },
   ];
 
-  const createdProperties = [];
+  const createdProperties: any[] = [];
   for (const pData of propertiesData) {
-    const prop = await prisma.property.upsert({
+    const prop: any = await prisma.property.upsert({
       where: { id: createdProperties.length + 1 },
       update: {
         title: pData.title,

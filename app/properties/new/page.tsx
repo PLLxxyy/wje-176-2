@@ -357,7 +357,7 @@ export default function NewPropertyPage() {
             <div>
               <label className="block text-sm font-medium mb-3">
                 房间照片 <span className="text-red-500">*</span>
-                <span className="text-gray-400 font-normal ml-2">（至少1张，点击设为封面）
+                <span className="text-gray-400 font-normal ml-2">（至少1张，点击设为封面）</span>
               </label>
               <div className="flex space-x-2 mb-3">
                 <input
@@ -366,7 +366,7 @@ export default function NewPropertyPage() {
                   placeholder="粘贴图片URL后点击添加"
                   value={photoInput}
                   onChange={(e) => setPhotoInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addPhoto()}
+                  onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addPhoto())}
                 />
                 <button onClick={addPhoto} className="btn-secondary inline-flex items-center">
                   <Upload className="w-4 h-4 mr-1" />
@@ -379,7 +379,7 @@ export default function NewPropertyPage() {
                   <button
                     key={i}
                     onClick={() => addSamplePhoto(p)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 transition hover:opacity-80 ${form.photos.includes(p) ? "border-rose-500" : "border-transparent opacity-60"}
+                    className={`aspect-square rounded-lg overflow-hidden border-2 transition hover:opacity-80 ${form.photos.includes(p) ? "border-rose-500" : "border-transparent opacity-60"}`}
                   >
                     <img src={p} alt="" className="w-full h-full object-cover" />
                   </button>
@@ -388,9 +388,9 @@ export default function NewPropertyPage() {
               {form.photos.length > 0 && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
                   {form.photos.map((p) => (
-                    <div key={p} className={`relative aspect-[4/3 rounded-lg overflow-hidden border-2 group ${
+                    <div key={p} className={`relative aspect-[4/3] rounded-lg overflow-hidden border-2 group ${
                       form.coverPhoto === p ? "border-rose-500" : "border-gray-200"
-                    }">
+                    }`}>
                       <img src={p} alt="" className="w-full h-full object-cover" />
                       {form.coverPhoto === p && (
                         <div className="absolute top-2 left-2 bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full">
@@ -414,7 +414,7 @@ export default function NewPropertyPage() {
                   ))}
                   <button
                     onClick={() => setForm({ ...form, photos: [...form.photos, ""] })}
-                    className="aspect-[4/3 rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:text-gray-600 flex flex-col items-center justify-center hover:border-rose-400 transition"
+                    className="aspect-[4/3] rounded-lg border-2 border-dashed border-gray-300 text-gray-400 hover:text-gray-600 flex flex-col items-center justify-center hover:border-rose-400 transition"
                   >
                     <Plus className="w-8 h-8 mb-2" />
                     <span className="text-sm">继续添加</span>

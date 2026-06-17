@@ -93,7 +93,15 @@ export async function GET(req: NextRequest) {
       take: 50,
     });
 
-    return ApiSuccess({ properties: properties.map(normalizeProperty) });
+    const safeProperties = properties.map((p) => {
+      const normalized = normalizeProperty(p) as any;
+      delete normalized.wifiPassword;
+      delete normalized.doorLockPassword;
+      delete normalized.checkOutInstructions;
+      return normalized;
+    });
+
+    return ApiSuccess({ properties: safeProperties });
   } catch (e) {
     console.error(e);
     return ApiError("获取房源列表失败", 500);
