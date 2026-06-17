@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #111827;
+  background: #ffffff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-rose-500 to-rose-600 text-white font-medium py-2.5 px-5 rounded-lg hover:from-rose-600 hover:to-rose-700 transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-white border border-gray-300 text-gray-700 font-medium py-2.5 px-5 rounded-lg hover:bg-gray-50 transition-all shadow-sm;
+  }
+  .btn-danger {
+    @apply bg-red-500 text-white font-medium py-2.5 px-5 rounded-lg hover:bg-red-600 transition-all;
+  }
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+}
+
+.swiper-pagination-bullet-active {
+  background: #ef4444 !important;
+}
