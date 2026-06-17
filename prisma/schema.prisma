@@ -27,26 +27,29 @@ model User {
 }
 
 model Property {
-  id              Int       @id @default(autoincrement())
-  title           String
-  description     String
-  address         String
-  city            String
-  latitude        Float?
-  longitude       Float?
-  roomType        String    // ENTIRE_HOME | PRIVATE_ROOM | SHARED_ROOM | STUDIO | APARTMENT | VILLA
-  maxGuests       Int
-  bedrooms        Int
-  bathrooms       Int
-  pricePerNight   Float
-  rating          Float     @default(0)
-  reviewCount     Int       @default(0)
-  status          String    @default("PENDING") // PENDING | APPROVED | REJECTED
-  amenities       String    // JSON string array
-  photos          String    // JSON string array
-  coverPhoto      String
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                  Int       @id @default(autoincrement())
+  title               String
+  description         String
+  address             String
+  city                String
+  latitude            Float?
+  longitude           Float?
+  roomType            String    // ENTIRE_HOME | PRIVATE_ROOM | SHARED_ROOM | STUDIO | APARTMENT | VILLA
+  maxGuests           Int
+  bedrooms            Int
+  bathrooms           Int
+  pricePerNight       Float
+  rating              Float     @default(0)
+  reviewCount         Int       @default(0)
+  status              String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  amenities           String    // JSON string array
+  photos              String    // JSON string array
+  coverPhoto          String
+  wifiPassword        String?
+  doorLockPassword    String?
+  checkOutInstructions String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   hostId          Int
   host            User      @relation(fields: [hostId], references: [id])

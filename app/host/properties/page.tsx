@@ -7,7 +7,8 @@ import { useAuth } from "@/context/AuthContext";
 import StatCard from "@/components/StatCard";
 import {
   Building2, PlusCircle, DollarSign, CalendarCheck, CalendarX, Star,
-  BedDouble, ChevronLeft, ChevronRight, Check, X, Edit, Eye
+  BedDouble, ChevronLeft, ChevronRight, Check, X, Edit, Eye,
+  Wifi, Lock, DoorOpen, FileText
 } from "lucide-react";
 import { PROPERTY_STATUS_LABELS, formatCurrency, ROOM_TYPES } from "@/lib/utils";
 
@@ -16,6 +17,9 @@ export default function HostPropertiesPage() {
   const router = useRouter();
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [guideModal, setGuideModal] = useState<{ property: any } | null>(null);
+  const [guideForm, setGuideForm] = useState({ wifiPassword: "", doorLockPassword: "", checkOutInstructions: "" });
+  const [guideSaving, setGuideSaving] = useState(false);
 
   useEffect(() => {
     if (!user && !authLoading) router.push("/auth/login");
@@ -30,6 +34,34 @@ export default function HostPropertiesPage() {
     const mine = all.filter((p: any) => p.hostId === user?.id || user?.role === "ADMIN");
     setProperties(mine);
     setLoading(false);
+  };
+
+  const openGuideModal = (property: any) => {
+    setGuideModal({ property });
+    setGuideForm({
+      wifiPassword: property.wifiPassword || "",
+      doorLockPassword: property.doorLockPassword || "",
+      checkOutInstructions: property.checkOutInstructions || "",
+    });
+  };
+
+  const saveGuide = async () => {
+    if (!guideModal) return;
+    setGuideSaving(true);
+    const res = await fetch(`/api/properties/${guideModal.property.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(guideForm),
+    });
+    const json = await res.json();
+    setGuideSaving(false);
+    if (json.success) {
+      alert("入住指南保存成功！");
+      setGuideModal(null);
+      loadData();
+    } else {
+      alert(json.message || "保存失败");
+    }
   };
 
   if (authLoading || !user) return null;
@@ -146,6 +178,13 @@ export default function HostPropertiesPage() {
                         >
                           <CalendarCheck className="w-4 h-4" />
                         </Link>
+                        <button
+                          onClick={() => openGuideModal(p)}
+                          className="p-2 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition"
+                          title="入住指南"
+                        >
+                          <FileText className="w-4 h-4" />
+                        </button>
                         <Link
                           href={`/properties/${p.id}`}
                           className="p-2 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition"
@@ -160,6 +199,61 @@ export default function HostPropertiesPage() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {guideModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setGuideModal(null)}>
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-semibold">入住指南 - {guideModal.property.title}</h3>
+              <button onClick={() => setGuideModal(null)}><X className="w-6 h-6 text-gray-400" /></button>
+            </div>
+            <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium mb-2 flex items-center">
+                  <Wifi className="w-4 h-4 mr-2 text-rose-500" />
+                  WiFi 密码
+                </label>
+                <input
+                  type="text"
+                  className="input-field"
+                  placeholder="请输入 WiFi 密码"
+                  value={guideForm.wifiPassword}
+                  onChange={(e) => setGuideForm({ ...guideForm, wifiPassword: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2 flex items-center">
+                  <Lock className="w-4 h-4 mr-2 text-rose-500" />
+                  门锁密码
+                </label>
+                <input
+                  type="text"
+                  className="input-field"
+                  placeholder="请输入智能门锁密码"
+                  value={guideForm.doorLockPassword}
+                  onChange={(e) => setGuideForm({ ...guideForm, doorLockPassword: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2 flex items-center">
+                  <DoorOpen className="w-4 h-4 mr-2 text-rose-500" />
+                  退房须知
+                </label>
+                <textarea
+                  rows={4}
+                  className="input-field"
+                  placeholder="请输入退房须知，如：请在中午12点前退房，关闭门窗、水电，将钥匙放回原处等"
+                  value={guideForm.checkOutInstructions}
+                  onChange={(e) => setGuideForm({ ...guideForm, checkOutInstructions: e.target.value })}
+                />
+              </div>
+              <button onClick={saveGuide} disabled={guideSaving} className="btn-primary w-full">
+                {guideSaving ? "保存中..." : "保存入住指南"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

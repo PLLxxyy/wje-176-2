@@ -16,6 +16,7 @@ export async function POST(req: NextRequest) {
     const {
       title, description, address, city, roomType, maxGuests,
       bedrooms, bathrooms, pricePerNight, amenities, photos, coverPhoto,
+      wifiPassword, doorLockPassword, checkOutInstructions,
     } = body;
 
     if (!title || !address || !city || !roomType || !maxGuests || !pricePerNight || !photos?.length) {
@@ -36,6 +37,9 @@ export async function POST(req: NextRequest) {
         amenities: stringifyJSONArray(amenities || []),
         photos: stringifyJSONArray(photos || []),
         coverPhoto: coverPhoto || photos[0],
+        wifiPassword: wifiPassword || null,
+        doorLockPassword: doorLockPassword || null,
+        checkOutInstructions: checkOutInstructions || null,
         hostId: user.id,
       },
     });

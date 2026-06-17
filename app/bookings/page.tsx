@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import {
   Calendar, MapPin, Users, Star, AlertCircle, Check, X, MessageSquare,
-  BedDouble, Phone, Mail, ChevronRight
+  BedDouble, Phone, Mail, ChevronRight, Wifi, Lock, DoorOpen, FileText
 } from "lucide-react";
 import { BOOKING_STATUS_LABELS, formatCurrency, formatDate } from "@/lib/utils";
 
@@ -230,6 +230,44 @@ export default function BookingsPage() {
                           </div>
                         </div>
                       </div>
+
+                      {["CONFIRMED", "CHECKED_IN", "COMPLETED"].includes(b.status) && b.property?.wifiPassword !== undefined && (
+                        <div className="mt-4 pt-4 border-t border-gray-100">
+                          <h4 className="text-sm font-semibold mb-3 flex items-center">
+                            <FileText className="w-4 h-4 mr-1.5 text-rose-500" />
+                            入住指南
+                          </h4>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                            {b.property.wifiPassword && (
+                              <div className="flex items-start space-x-2 bg-blue-50 p-3 rounded-lg">
+                                <Wifi className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="text-xs text-gray-500">WiFi 密码</p>
+                                  <p className="font-medium text-gray-900">{b.property.wifiPassword}</p>
+                                </div>
+                              </div>
+                            )}
+                            {b.property.doorLockPassword && (
+                              <div className="flex items-start space-x-2 bg-emerald-50 p-3 rounded-lg">
+                                <Lock className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                                <div>
+                                  <p className="text-xs text-gray-500">门锁密码</p>
+                                  <p className="font-medium text-gray-900">{b.property.doorLockPassword}</p>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          {b.property.checkOutInstructions && (
+                            <div className="mt-3 flex items-start space-x-2 bg-amber-50 p-3 rounded-lg">
+                              <DoorOpen className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+                              <div>
+                                <p className="text-xs text-gray-500">退房须知</p>
+                                <p className="text-gray-900 whitespace-pre-line">{b.property.checkOutInstructions}</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div className="md:col-span-3 flex flex-col md:items-end md:border-l md:border-gray-100 md:pl-6 justify-between">
                       <div className="text-left md:text-right">

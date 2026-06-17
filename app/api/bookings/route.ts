@@ -122,6 +122,7 @@ export async function GET(req: NextRequest) {
           select: {
             id: true, title: true, coverPhoto: true, city: true, address: true,
             pricePerNight: true, maxGuests: true,
+            wifiPassword: true, doorLockPassword: true, checkOutInstructions: true,
           },
         },
         reviews: true,
@@ -129,7 +130,23 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    return ApiSuccess({ bookings });
+    const resultBookings = bookings.map((b) => {
+      const booking = b as any;
+      const canViewGuide =
+        user?.role === "ADMIN" ||
+        booking.hostId === user?.id ||
+        (booking.guestId === user?.id &&
+          ["CONFIRMED", "CHECKED_IN", "COMPLETED"].includes(booking.status));
+
+      if (!canViewGuide) {
+        delete booking.property.wifiPassword;
+        delete booking.property.doorLockPassword;
+        delete booking.property.checkOutInstructions;
+      }
+      return booking;
+    });
+
+    return ApiSuccess({ bookings: resultBookings });
   } catch (e) {
     console.error(e);
     return ApiError("获取订单失败", 500);
